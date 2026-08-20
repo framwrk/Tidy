@@ -6,6 +6,7 @@
   "scripts": {
     "start": "bun run build",
     "build": "bun build ./index.ts --compile --target=bun-darwin-arm64 --outfile dist/tidy-macos-arm64",
+    "fallow": "bunx fallow"
   },
   "devDependencies": {
     "@types/bun": "latest"
