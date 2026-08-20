@@ -6,12 +6,16 @@
   "scripts": {
     "start": "bun run build",
     "build": "bun build ./index.ts --compile --target=bun-darwin-arm64 --outfile dist/tidy-macos-arm64",
+    "lint": "eslint .",
     "format": "prettier --write .",
     "fallow": "bunx fallow"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/bun": "latest",
     "prettier": "3.9.6"
+    "eslint": "^10.8.1",
+    "typescript-eslint": "^8.67.0"
   },
   "peerDependencies": {
     "typescript": "^7"
