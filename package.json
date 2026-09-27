@@ -4,10 +4,10 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "bun run build",
+    "start": "bun index.ts",
     "build": "bun build ./index.ts --compile --target=bun-darwin-arm64 --outfile dist/tidy-macos-arm64",
-    "test": "./dist/tidy-macos-arm64",
-    "dev": "bun start && bun run test",
+    "test": "bun test",
+    "dev": "bun index.ts",
     "lint": "eslint .",
     "format": "prettier --write .",
     "fallow": "bunx fallow"
