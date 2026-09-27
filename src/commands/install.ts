@@ -1,3 +1,5 @@
+import { log } from "../lib/utilities";
+
 export function install() {
-  console.log("install command called");
+  log("install command called");
 }

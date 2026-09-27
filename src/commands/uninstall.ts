@@ -1,3 +1,5 @@
+import { log } from "../lib/utilities";
+
 export function uninstall() {
-  console.log("uninstall command called");
+  log("uninstall command called");
 }

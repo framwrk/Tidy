@@ -1,3 +1,5 @@
+import { log } from "../lib/utilities";
+
 export function list() {
-  console.log("list command called");
+  log("list command called");
 }
