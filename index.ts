@@ -1,8 +1,7 @@
+import { SCRIPT_NAME } from "./src/constants";
 import { install } from "./src/commands/install";
 import { list } from "./src/commands/list";
 import { uninstall } from "./src/commands/uninstall";
-
-const SCRIPT_NAME = "Tidy";
 
 const command = process.argv[2];
 

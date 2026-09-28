@@ -1,24 +1,6 @@
 import type { AbsolutePath, Snapshot } from "../types";
-import { Glob, type GlobScanOptions } from "bun";
-
-const SNAPSHOT_ROOTS: AbsolutePath[] = ["/opt/homebrew/bin", "/usr/local/bin"];
-const EXCLUDED_DIRS = ["Desktop", "Documents", "Downloads", "Library", "Movies", "Music", "Pictures", "Public", ".Trash"];
-const EXCLUDED_DIR_NAMES = new Set([
-  "__pycache__",
-  ".cache",
-  ".git",
-  ".mypy_cache",
-  ".npm",
-  ".pytest_cache",
-  ".ruff_cache",
-  "build",
-  "dist",
-  "node_modules",
-  "out",
-  "target",
-  "vendor",
-]);
-const SCAN_OPTIONS: GlobScanOptions = { onlyFiles: false, followSymlinks: false, dot: true };
+import { EXCLUDED_DIRS, EXCLUDED_DIR_NAMES, SCAN_OPTIONS, SNAPSHOT_ROOTS } from "../constants";
+import { Glob } from "bun";
 
 export function snapshot(): Snapshot {
   const home = Bun.env.HOME;
