@@ -1,9 +1,28 @@
 import type { AbsolutePath } from "./types";
 import type { GlobScanOptions } from "bun";
 
+// Identity
+
+/** Name Tidy uses for itself in help output and prompts. */
 export const SCRIPT_NAME = "Tidy";
 
+// Snapshot walk
+
+/**
+ * Extra roots to walk alongside `$HOME` when taking a snapshot.
+ * `snapshot()` resolves `$HOME` itself and throws if the variable is unset, so it is not listed here.
+ */
 export const SNAPSHOT_ROOTS: AbsolutePath[] = ["/opt/homebrew/bin", "/usr/local/bin"];
+
+/** How each directory is scanned: record files and folders, don't follow symlinks, include dot-prefixed entries. */
+export const SCAN_OPTIONS: GlobScanOptions = { onlyFiles: false, followSymlinks: false, dot: true };
+
+// Skip rules
+// Skipped entries are neither recorded nor descended, so mtime churn inside them can't register as an edit.
+
+/**
+ * Top-level folder names under `$HOME` to skip. Applied to the home root only; edit this list to change what Tidy ignores.
+ */
 export const EXCLUDED_DIRS = [
   "Desktop",
   "Documents",
@@ -15,6 +34,11 @@ export const EXCLUDED_DIRS = [
   "Public",
   ".Trash",
 ];
+
+/**
+ * Folder names to skip at any depth. Folders only, so a file named `build` stays tracked.
+ * `venv` and `.venv` are deliberately absent: an installer can create one as its install target, and a missed before-image is unrecoverable.
+ */
 export const EXCLUDED_DIR_NAMES = new Set([
   "__pycache__",
   ".cache",
@@ -30,4 +54,3 @@ export const EXCLUDED_DIR_NAMES = new Set([
   "target",
   "vendor",
 ]);
-export const SCAN_OPTIONS: GlobScanOptions = { onlyFiles: false, followSymlinks: false, dot: true };
