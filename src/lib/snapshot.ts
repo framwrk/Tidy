@@ -1,15 +1,20 @@
-import { Glob } from "bun";
+import type { AbsolutePath, Snapshot } from "../types";
+import { Glob, type GlobScanOptions } from "bun";
 
-const SNAPSHOT_ROOTS = [Bun.env.HOME ?? "", "/usr/bin", "/usr/local/bin"];
-const SCAN_OPTIONS = { onlyFiles: false, followSymlinks: false, dot: true };
+const SNAPSHOT_ROOTS: AbsolutePath[] = ["/usr/bin", "/usr/local/bin"];
+const SCAN_OPTIONS: GlobScanOptions = { onlyFiles: false, followSymlinks: false, dot: true };
 
-export function snapshot() {
-  const entries = new Map<string, number>();
+export function snapshot(): Snapshot {
+  const home = Bun.env.HOME;
+  if (!home) throw new Error("HOME is not set");
+
+  const entries: Snapshot = new Map();
+  snapshotDir(home, entries);
   for (const root of SNAPSHOT_ROOTS) snapshotDir(root, entries);
   return entries;
 }
 
-function snapshotDir(dir: string, entries: Map<string, number>) {
+function snapshotDir(dir: AbsolutePath, entries: Snapshot): void {
   let names: string[];
   let subdirs: Set<string>;
   try {

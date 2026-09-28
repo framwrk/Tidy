@@ -1,5 +1,4 @@
 import { log } from "../lib/utilities";
-
-export function list() {
+export function list(): void {
   log("list command called");
 }

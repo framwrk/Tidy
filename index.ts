@@ -27,7 +27,7 @@ switch (command) {
     help();
 }
 
-function help() {
+function help(): void {
   console.log("Name");
   console.log(`\t${SCRIPT_NAME} - Wraps installers and remembers what they added, so you can cleanly remove them later.`);
 
