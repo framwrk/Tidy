@@ -1,7 +1,23 @@
 import type { AbsolutePath, Snapshot } from "../types";
 import { Glob, type GlobScanOptions } from "bun";
 
-const SNAPSHOT_ROOTS: AbsolutePath[] = ["/usr/bin", "/usr/local/bin"];
+const SNAPSHOT_ROOTS: AbsolutePath[] = ["/opt/homebrew/bin", "/usr/local/bin"];
+const EXCLUDED_DIRS = ["Desktop", "Documents", "Downloads", "Library", "Movies", "Music", "Pictures", "Public", ".Trash"];
+const EXCLUDED_DIR_NAMES = new Set([
+  "__pycache__",
+  ".cache",
+  ".git",
+  ".mypy_cache",
+  ".npm",
+  ".pytest_cache",
+  ".ruff_cache",
+  "build",
+  "dist",
+  "node_modules",
+  "out",
+  "target",
+  "vendor",
+]);
 const SCAN_OPTIONS: GlobScanOptions = { onlyFiles: false, followSymlinks: false, dot: true };
 
 export function snapshot(): Snapshot {
@@ -9,12 +25,13 @@ export function snapshot(): Snapshot {
   if (!home) throw new Error("HOME is not set");
 
   const entries: Snapshot = new Map();
-  snapshotDir(home, entries);
+  const excluded = new Set(EXCLUDED_DIRS.map((name) => `${home}/${name}`));
+  snapshotDir(home, entries, excluded);
   for (const root of SNAPSHOT_ROOTS) snapshotDir(root, entries);
   return entries;
 }
 
-function snapshotDir(dir: AbsolutePath, entries: Snapshot): void {
+function snapshotDir(dir: AbsolutePath, entries: Snapshot, excluded: Set<string> = new Set()): void {
   let names: string[];
   let subdirs: Set<string>;
   try {
@@ -26,7 +43,9 @@ function snapshotDir(dir: AbsolutePath, entries: Snapshot): void {
 
   for (const name of names) {
     const path = `${dir}/${name}`;
+    const isSubdir = subdirs.has(name);
+    if (excluded.has(path) || (isSubdir && EXCLUDED_DIR_NAMES.has(name))) continue;
     entries.set(path, Bun.file(path).lastModified);
-    if (subdirs.has(name)) snapshotDir(path, entries);
+    if (isSubdir) snapshotDir(path, entries, excluded);
   }
 }
